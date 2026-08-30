@@ -1,0 +1,43 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Dataset
+WFLW/
+dataset/
+datasets/
+data/
+
+# Model weights
+*.pth
+*.pt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Training outputs
+runs/
+checkpoints/
+logs/
+
+# Archives
+*.zip
+*.rar
+*.7z
+
+# IDE
+.vscode/
+.idea/
+
+# Local files
+structure.txt
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
