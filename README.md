@@ -372,7 +372,22 @@ AI-Driver-Monitoring-System/
 `-- requirements.txt
 ```
 
-> The pretrained model download will be provided through the GitHub Releases section.
+### Download
+
+Download the pretrained 98-point facial landmark model from GitHub Releases:
+
+[**Download landmark.pth (v1.0.0)**](https://github.com/datphan10/AI-Driver-Monitoring-System/releases/download/v1.0.0/landmark.pth)
+
+After downloading, place `landmark.pth` in the project root:
+
+```text
+AI-Driver-Monitoring-System/
+├── landmark.pth
+├── assets/
+├── notebooks/
+├── src/
+├── README.md
+└── requirements.txt
 
 ---
 
