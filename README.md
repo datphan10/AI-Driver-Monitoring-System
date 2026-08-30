@@ -1,200 +1,171 @@
-# AI-Based Driver Monitoring System
+# 🚗 AI Driver Monitoring System
 
-A real-time **Driver Monitoring System (DMS)** based on computer vision and deep learning.
+<p align="center">
+  <b>Real-time Driver Monitoring System using facial landmark detection, EAR/MAR analysis, head pose estimation, and audio warning.</b>
+</p>
 
-The project uses facial detection and a custom 98-point facial landmark model to analyze important facial features of the driver. Eye Aspect Ratio (EAR), Mouth Aspect Ratio (MAR), and head pose estimation are used to support driver-state monitoring and real-time warning.
+<p align="center">
+  Python • PyTorch • OpenCV • MediaPipe • Computer Vision • Edge AI
+</p>
 
 ---
 
-## Demo
+## 🎬 Demo
 
 ### 98-Point Facial Landmark Detection
 
-| Input Image | Landmark Detection Result |
+| Input Image | Detection Result |
 |---|---|
-| ![](assets/test.jpg) | ![](assets/output.jpg) |
+| <img src="assets/test.jpg" width="420"> | <img src="assets/output.jpg" width="420"> |
 
-The system first detects the face and then predicts **98 facial landmark points** for further driver-state analysis.
-
----
-
-## Overview
-
-Driver behavior is an important factor in road safety. A Driver Monitoring System can use a camera to continuously analyze facial information and identify visual cues related to the driver's state.
-
-This project implements a vision-based processing pipeline consisting of:
-
-1. Face detection
-2. Face preprocessing
-3. 98-point facial landmark prediction
-4. Eye Aspect Ratio (EAR) calculation
-5. Mouth Aspect Ratio (MAR) calculation
-6. Head pose estimation
-7. Real-time driver-state analysis
-8. Visual and audio warning
-
-The facial landmark model is based on a modified **MobileNetV2** architecture and is trained using the **WFLW facial landmark dataset**.
+The system detects the driver's face and predicts **98 facial landmarks** for eye, mouth, and head-pose analysis.
 
 ---
 
-## System Pipeline
+## 📌 Overview
+
+This project implements a real-time **Driver Monitoring System (DMS)** based on computer vision and deep learning.
+
+The system uses a camera to detect the driver's face, estimate 98 facial landmarks, and analyze facial geometry to support driver-state monitoring.
+
+Main processing stages:
+
+- Face detection using MediaPipe
+- Face preprocessing
+- 98-point facial landmark regression
+- Eye Aspect Ratio (EAR)
+- Mouth Aspect Ratio (MAR)
+- Head pose estimation
+- Real-time warning logic
+- Audio warning
+
+The facial landmark model is based on a modified **MobileNetV2** architecture and trained using the **WFLW facial landmark dataset**.
+
+---
+
+## 🧠 System Pipeline
 
 ```text
 Camera / Input Image
-        |
-        v
-+----------------------+
-|    Face Detection    |
-|      MediaPipe       |
-+----------------------+
-        |
-        v
-+----------------------+
-|   Face Preprocessing |
-| Grayscale + 112x112  |
-+----------------------+
-        |
-        v
-+----------------------+
-|  Modified MobileNetV2|
-+----------------------+
-        |
-        v
-+----------------------+
-| 98 Facial Landmarks  |
-+----------------------+
-        |
-        +------------------+------------------+
-        |                  |                  |
-        v                  v                  v
-+---------------+   +---------------+   +---------------+
-|      EAR      |   |      MAR      |   |   SolvePnP    |
-| Eye Analysis  |   | Mouth Analysis|   |   Head Pose   |
-+---------------+   +---------------+   +---------------+
-        |                  |                  |
-        +------------------+------------------+
-                           |
-                           v
-                 +--------------------+
-                 | Driver-State Logic |
-                 +--------------------+
-                           |
-                           v
-                 +--------------------+
-                 |  Visual / Audio    |
-                 |      Warning       |
-                 +--------------------+
+        │
+        ▼
+┌─────────────────────┐
+│   Face Detection    │
+│      MediaPipe      │
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│ Face Preprocessing  │
+│ Grayscale + 112x112 │
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│ Modified MobileNetV2│
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│ 98 Facial Landmarks │
+└─────────────────────┘
+        │
+        ├──────────────► EAR ───────► Eye Analysis
+        │
+        ├──────────────► MAR ───────► Mouth Analysis
+        │
+        └──────────────► SolvePnP ──► Head Pose
+                                         │
+                                         ▼
+                               Driver-State Logic
+                                         │
+                                         ▼
+                               Visual / Audio Alert
 ```
 
 ---
 
-## Features
+## ✨ Features
 
-- Real-time face detection using MediaPipe
+- Real-time face detection with MediaPipe
 - 98-point facial landmark detection
-- Modified MobileNetV2 landmark regression model
-- Grayscale face input for landmark prediction
-- Eye Aspect Ratio (EAR) calculation
-- Mouth Aspect Ratio (MAR) calculation
-- Head pose estimation using OpenCV SolvePnP
+- Modified MobileNetV2 regression model
+- Eye Aspect Ratio calculation
+- Mouth Aspect Ratio calculation
+- Head pose estimation using SolvePnP
 - Pitch, yaw, and roll estimation
 - Real-time webcam processing
-- Landmark smoothing for real-time processing
-- Driver-state warning logic
-- Audio warning support
-- Static image testing
-- Model training using the WFLW dataset
-- Model evaluation tools
+- Landmark smoothing
+- Audio warning
+- Static image inference
+- WFLW training pipeline
+- Model evaluation utilities
 - Google Colab training notebook
 
 ---
 
-## Facial Landmark Model
+## 🧩 Facial Landmark Model
 
-The landmark detector is implemented using a customized **MobileNetV2** neural network.
+The facial landmark detector uses a customized **MobileNetV2** architecture.
 
 ### Input
 
 ```text
 Grayscale face image
-        |
-        v
-     112 x 112
+        ↓
+     112 × 112
 ```
 
 ### Output
 
-The neural network predicts:
-
 ```text
-98 landmarks x 2 coordinates = 196 outputs
+98 landmarks × 2 coordinates
+        ↓
+196 regression outputs
 ```
 
-Each landmark contains normalized:
+Each landmark contains normalized `(x, y)` coordinates.
 
-```text
-(x, y)
-```
+### Main Modifications
 
-coordinates.
-
-### Model Modifications
-
-The original MobileNetV2 architecture is modified for the facial landmark regression task.
-
-Main modifications include:
-
-- Input changed from 3-channel RGB to 1-channel grayscale
-- ReLU6 activations replaced with ReLU
+- RGB input changed to grayscale input
+- First convolution adapted for 1 input channel
+- ReLU6 replaced with ReLU
 - Additional convolutional processing
 - Custom regression head
 - Final output layer with 196 values
 
-The regression head produces the coordinates of all 98 facial landmarks.
-
 ---
 
-## Driver-State Analysis
+## 👁️ Driver-State Analysis
 
-### Eye Aspect Ratio (EAR)
+### Eye Aspect Ratio — EAR
 
-The Eye Aspect Ratio is calculated from facial landmarks around the eyes.
-
-EAR provides geometric information about eye opening and can be used by the real-time monitoring logic to analyze eye state.
+EAR is calculated from landmarks around the eyes and provides information about eye opening.
 
 ```text
-98 Facial Landmarks
-        |
-        v
-Eye Landmark Points
-        |
-        v
-       EAR
+Eye Landmarks
+      ↓
+     EAR
+      ↓
+Eye-State Analysis
 ```
 
----
+### Mouth Aspect Ratio — MAR
 
-### Mouth Aspect Ratio (MAR)
-
-The Mouth Aspect Ratio is calculated using landmarks around the mouth.
-
-MAR provides information about mouth opening and can be used as part of yawning-related analysis.
+MAR is calculated from landmarks around the mouth and provides information about mouth opening.
 
 ```text
-98 Facial Landmarks
-        |
-        v
-Mouth Landmark Points
-        |
-        v
-       MAR
+Mouth Landmarks
+       ↓
+      MAR
+       ↓
+Mouth / Yawning Analysis
 ```
-
----
 
 ### Head Pose Estimation
 
-Head orientation is estimated using OpenCV's **SolvePnP** method.
+Head orientation is estimated using OpenCV `solvePnP`.
 
 The system estimates:
 
@@ -202,105 +173,89 @@ The system estimates:
 - Yaw
 - Roll
 
-Pipeline:
-
 ```text
 Facial Landmarks
-        |
-        v
-Selected 2D Face Points
-        |
-        v
-3D Face Reference Points
-        |
-        v
+       ↓
+Selected 2D Points
+       ↓
+3D Face Reference
+       ↓
 OpenCV SolvePnP
-        |
-        v
+       ↓
 Pitch / Yaw / Roll
 ```
 
-This information can be used by the monitoring logic to analyze the driver's head orientation.
-
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
-DMS_Project1/
-|
-|-- assets/
-|   |-- test.jpg
-|   `-- output.jpg
-|
-|-- notebooks/
-|   `-- Train_Colab.ipynb
-|
-|-- src/
-|   |-- alarm_pip.wav
-|   |-- dataset.py
-|   |-- ear_utils.py
-|   |-- evaluate.py
-|   |-- Hinhnen.jpg
-|   |-- model.py
-|   |-- realtime.py
-|   |-- test_image.py
-|   `-- train.py
-|
-|-- .gitignore
-|-- README.md
-|-- requirements.txt
-`-- landmark.pth        # Download separately
+AI-Driver-Monitoring-System/
+│
+├── assets/
+│   ├── test.jpg
+│   └── output.jpg
+│
+├── notebooks/
+│   └── Train_Colab.ipynb
+│
+├── src/
+│   ├── alarm_pip.wav
+│   ├── dataset.py
+│   ├── ear_utils.py
+│   ├── evaluate.py
+│   ├── Hinhnen.jpg
+│   ├── model.py
+│   ├── realtime.py
+│   ├── test_image.py
+│   └── train.py
+│
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
-### Source Files
-
-| File | Description |
-|---|---|
-| `src/model.py` | Defines the modified MobileNetV2 facial landmark model |
-| `src/dataset.py` | Loads and preprocesses the WFLW dataset |
-| `src/train.py` | Trains the 98-point facial landmark model |
-| `src/evaluate.py` | Evaluates the trained model |
-| `src/ear_utils.py` | EAR, MAR, and head pose calculations |
-| `src/test_image.py` | Runs landmark detection on a static image |
-| `src/realtime.py` | Runs the real-time Driver Monitoring System |
-| `notebooks/Train_Colab.ipynb` | Google Colab training workflow |
+The pretrained model is downloaded separately from GitHub Releases.
 
 ---
 
-## Requirements
+## 📦 Pretrained Model
 
-Recommended environment:
+Download the pretrained **98-point facial landmark model**:
+
+### [⬇️ Download landmark.pth — v1.0.0](https://github.com/datphan10/AI-Driver-Monitoring-System/releases/download/v1.0.0/landmark.pth)
+
+After downloading, place the model in the project root:
 
 ```text
-Python 3.10
+AI-Driver-Monitoring-System/
+├── landmark.pth
+├── assets/
+├── notebooks/
+├── src/
+├── README.md
+└── requirements.txt
 ```
-
-The main libraries used in this project are:
-
-- PyTorch
-- TorchVision
-- OpenCV
-- MediaPipe
-- NumPy
 
 ---
 
-## Installation
+## ⚙️ Installation
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/AI-Driver-Monitoring-System.git
-```
-
-Move into the project directory:
-
-```bash
+git clone https://github.com/datphan10/AI-Driver-Monitoring-System.git
 cd AI-Driver-Monitoring-System
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Python virtual environment
+
+Recommended:
+
+```text
+Python 3.10
+```
 
 Windows:
 
@@ -308,7 +263,7 @@ Windows:
 py -3.10 -m venv .venv
 ```
 
-Activate the environment:
+Activate:
 
 ```bash
 .venv\Scripts\activate
@@ -323,77 +278,24 @@ pip install -r requirements.txt
 
 ---
 
-## Important MediaPipe Compatibility Note
-
-The current source code uses the legacy MediaPipe Solutions API:
-
-```python
-mp.solutions.face_detection
-```
-
-The tested project environment uses:
+## 📚 Main Dependencies
 
 ```text
-mediapipe==0.10.21
 numpy==1.26.4
 opencv-contrib-python==4.11.0.86
+mediapipe==0.10.21
+torch==2.13.0
+torchvision==0.28.0
 ```
 
-Using incompatible newer versions of MediaPipe may cause:
-
-```text
-AttributeError: module 'mediapipe' has no attribute 'solutions'
-```
-
-For reproducibility, install the versions specified in `requirements.txt`.
+> The project currently uses MediaPipe's legacy `mp.solutions` API.  
+> `mediapipe==0.10.21` is recommended for compatibility.
 
 ---
 
-## Pretrained Model
+## 🖼️ Run Static Image Test
 
-The pretrained landmark model is:
-
-```text
-landmark.pth
-```
-
-The weight file is not stored directly in the Git repository.
-
-After downloading the pretrained model, place it in the project root:
-
-```text
-AI-Driver-Monitoring-System/
-|
-|-- landmark.pth
-|-- assets/
-|-- notebooks/
-|-- src/
-|-- README.md
-`-- requirements.txt
-```
-
-### Download
-
-Download the pretrained 98-point facial landmark model from GitHub Releases:
-
-[**Download landmark.pth (v1.0.0)**](https://github.com/datphan10/AI-Driver-Monitoring-System/releases/download/v1.0.0/landmark.pth)
-
-After downloading, place `landmark.pth` in the project root:
-
-```text
-AI-Driver-Monitoring-System/
-├── landmark.pth
-├── assets/
-├── notebooks/
-├── src/
-├── README.md
-└── requirements.txt
-
----
-
-## Run Static Image Test
-
-The default test image is:
+Default input:
 
 ```text
 assets/test.jpg
@@ -405,22 +307,22 @@ Run:
 python src/test_image.py
 ```
 
-The result is saved automatically to:
+Output:
 
 ```text
 assets/output.jpg
 ```
 
-The output image contains:
+The result contains:
 
-- Detected face bounding box
+- Face bounding box
 - 98 predicted facial landmarks
 
 ---
 
-## Run Real-Time Driver Monitoring
+## 🎥 Run Real-Time Driver Monitoring
 
-Make sure a webcam is connected and accessible.
+Make sure a webcam is connected.
 
 Run:
 
@@ -428,42 +330,33 @@ Run:
 python src/realtime.py
 ```
 
-The real-time application processes camera frames and performs:
+Real-time processing:
 
 ```text
 Camera
-  |
-  v
+  ↓
 Face Detection
-  |
-  v
+  ↓
 98 Facial Landmarks
-  |
-  +--> EAR
-  |
-  +--> MAR
-  |
-  +--> Head Pose
-  |
-  v
+  ↓
+EAR + MAR + Head Pose
+  ↓
 Driver-State Analysis
-  |
-  v
-Warning
+  ↓
+Visual / Audio Warning
 ```
 
 ---
 
-## Training
+## 🏋️ Training
 
-The landmark model is trained using the **WFLW (Wider Facial Landmarks in-the-Wild)** dataset.
+The model is trained using the **WFLW facial landmark dataset**.
 
 The training pipeline includes:
 
-- Face image loading
-- Bounding-box cropping
+- Face bounding-box cropping
 - Grayscale conversion
-- Image resizing to 112 x 112
+- Resize to 112 × 112
 - Landmark normalization
 - Wing Loss
 - Increased weighting for eye landmarks
@@ -473,59 +366,53 @@ The training pipeline includes:
 - Gradient clipping
 - Early stopping
 
-Run training with:
+Run:
 
 ```bash
 python src/train.py
 ```
 
-A Google Colab training workflow is also included:
+Google Colab notebook:
 
 ```text
 notebooks/Train_Colab.ipynb
 ```
 
-This can be used to train the model with GPU acceleration in Google Colab.
-
 ---
 
-## Training Configuration
-
-The current training configuration includes:
+## 📊 Training Configuration
 
 | Parameter | Value |
 |---|---:|
-| Input size | 112 x 112 |
+| Input size | 112 × 112 |
 | Input channels | 1 |
 | Facial landmarks | 98 |
 | Model outputs | 196 |
 | Batch size | 64 |
 | Maximum epochs | 80 |
-| Initial learning rate | 0.001 |
+| Learning rate | 0.001 |
 | Weight decay | 1e-5 |
 | Optimizer | Adam |
 | Loss function | Wing Loss |
 | LR scheduler | Cosine Annealing |
 | Early stopping patience | 10 |
 
-Additional landmark weighting is applied during training:
+Landmark weighting:
 
 ```text
-Eye landmarks   -> 5x weight
-Mouth landmarks -> 2x weight
+Eye landmarks   → 5×
+Mouth landmarks → 2×
 ```
 
 ---
 
-## Evaluation
+## 📈 Evaluation
 
-The project includes:
+Evaluation script:
 
 ```text
 src/evaluate.py
 ```
-
-for evaluating the trained landmark model.
 
 Run:
 
@@ -533,55 +420,34 @@ Run:
 python src/evaluate.py
 ```
 
-Evaluation code can be used to analyze landmark prediction performance and inference behavior on the WFLW dataset.
+The evaluation workflow can be used to analyze landmark prediction accuracy and inference performance.
 
 ---
 
-## Technologies
+## 🛠️ Tech Stack
 
-```text
-Python
-PyTorch
-TorchVision
-OpenCV
-MediaPipe
-NumPy
-WFLW Dataset
-Google Colab
-Computer Vision
-Deep Learning
-```
+<p align="center">
+
+**Python** • **PyTorch** • **TorchVision** • **OpenCV** • **MediaPipe** • **NumPy**
+
+</p>
 
 ---
 
-## Current Development Status
+## 🚀 Future Improvements
 
-Implemented:
-
-- [x] WFLW dataset loader
-- [x] 98-point facial landmark model
-- [x] Model training pipeline
-- [x] Model evaluation
-- [x] Static image inference
-- [x] MediaPipe face detection
-- [x] EAR calculation
-- [x] MAR calculation
-- [x] Head pose estimation
-- [x] Real-time camera processing
-- [x] Audio warning logic
-
-Possible future improvements:
-
-- [ ] Improve landmark accuracy under difficult lighting conditions
-- [ ] Improve robustness for large head rotations
-- [ ] Optimize inference performance for edge devices
-- [ ] Export the landmark model to ONNX
+- [ ] Add real-time demo GIF/video
+- [ ] Improve robustness under difficult lighting
+- [ ] Improve landmark accuracy for large head rotations
+- [ ] Optimize inference for edge devices
+- [ ] Export model to ONNX
 - [ ] Apply model quantization
-- [ ] Add more systematic real-time performance evaluation
+- [ ] Benchmark FPS and latency on edge hardware
+- [ ] Add systematic DMS performance evaluation
 
 ---
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 This project is developed for educational and research purposes.
 
@@ -589,6 +455,22 @@ It is not intended to replace certified automotive driver-monitoring or safety s
 
 ---
 
-## Author
+## 👤 Author
 
-Developed as a computer vision and Edge AI project.
+**Phan Việt Thành Đạt**
+
+GitHub: [@datphan10](https://github.com/datphan10)
+
+---
+
+## 📄 License
+
+This project is released under the MIT License.
+
+See [`LICENSE`](LICENSE) for details.
+
+---
+
+<p align="center">
+  <b>Computer Vision • Deep Learning • Edge AI</b>
+</p>
