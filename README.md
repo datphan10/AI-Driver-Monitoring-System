@@ -10,7 +10,7 @@
 
 ---
 
-## 🎬 Demo
+## Demo
 
 ### 98-Point Facial Landmark Detection
 
@@ -85,7 +85,7 @@ Camera / Input Image
 
 ---
 
-## ✨ Features
+## Features
 
 - Real-time face detection with MediaPipe
 - 98-point facial landmark detection
@@ -434,7 +434,7 @@ The evaluation workflow can be used to analyze landmark prediction accuracy and 
 
 ---
 
-## 🚀 Future Improvements
+## Future Improvements
 
 - [ ] Add real-time demo GIF/video
 - [ ] Improve robustness under difficult lighting
@@ -455,7 +455,7 @@ It is not intended to replace certified automotive driver-monitoring or safety s
 
 ---
 
-## 👤 Author
+## Author
 
 **Phan Việt Thành Đạt**
 
@@ -463,7 +463,7 @@ GitHub: [@datphan10](https://github.com/datphan10)
 
 ---
 
-## 📄 License
+## License
 
 This project is released under the MIT License.
 
