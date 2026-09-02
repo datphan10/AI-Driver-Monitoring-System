@@ -1,4 +1,4 @@
-# 🚗 AI Driver Monitoring System
+# AI Driver Monitoring System
 
 <p align="center">
   <b>Real-time Driver Monitoring System using facial landmark detection, EAR/MAR analysis, head pose estimation, and audio warning.</b>
@@ -22,7 +22,7 @@ The system detects the driver's face and predicts **98 facial landmarks** for ey
 
 ---
 
-## 📌 Overview
+## Overview
 
 This project implements a real-time **Driver Monitoring System (DMS)** based on computer vision and deep learning.
 
@@ -43,7 +43,7 @@ The facial landmark model is based on a modified **MobileNetV2** architecture an
 
 ---
 
-## 🧠 System Pipeline
+## System Pipeline
 
 ```text
 Camera / Input Image
@@ -104,7 +104,7 @@ Camera / Input Image
 
 ---
 
-## 🧩 Facial Landmark Model
+## Facial Landmark Model
 
 The facial landmark detector uses a customized **MobileNetV2** architecture.
 
@@ -137,7 +137,7 @@ Each landmark contains normalized `(x, y)` coordinates.
 
 ---
 
-## 👁️ Driver-State Analysis
+## Driver-State Analysis
 
 ### Eye Aspect Ratio — EAR
 
@@ -187,7 +187,7 @@ Pitch / Yaw / Roll
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 AI-Driver-Monitoring-System/
@@ -220,7 +220,7 @@ The pretrained model is downloaded separately from GitHub Releases.
 
 ---
 
-## 📦 Pretrained Model
+## Pretrained Model
 
 Download the pretrained **98-point facial landmark model**:
 
@@ -278,7 +278,7 @@ pip install -r requirements.txt
 
 ---
 
-## 📚 Main Dependencies
+## Main Dependencies
 
 ```text
 numpy==1.26.4
@@ -293,7 +293,7 @@ torchvision==0.28.0
 
 ---
 
-## 🖼️ Run Static Image Test
+## Run Static Image Test
 
 Default input:
 
@@ -348,7 +348,7 @@ Visual / Audio Warning
 
 ---
 
-## 🏋️ Training
+## Training
 
 The model is trained using the **WFLW facial landmark dataset**.
 
@@ -380,7 +380,7 @@ notebooks/Train_Colab.ipynb
 
 ---
 
-## 📊 Training Configuration
+## Training Configuration
 
 | Parameter | Value |
 |---|---:|
@@ -406,7 +406,7 @@ Mouth landmarks → 2×
 
 ---
 
-## 📈 Evaluation
+## Evaluation
 
 Evaluation script:
 
@@ -424,7 +424,7 @@ The evaluation workflow can be used to analyze landmark prediction accuracy and 
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 <p align="center">
 
@@ -447,7 +447,7 @@ The evaluation workflow can be used to analyze landmark prediction accuracy and 
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This project is developed for educational and research purposes.
 
